@@ -19,6 +19,7 @@ class Menu:
         self.currSelectedLevel = 1
         self.levelNames = []
         self.inChoosingLevel = False
+        self.inAbout = False
         self.dashboard = dashboard
         self.levelCount = 0
         self.spritesheet = Spritesheet("./img/title_screen.png")
@@ -49,11 +50,36 @@ class Menu:
         self.dashboard.update()
 
         if not self.inSettings:
-            self.drawMenu()
+            if not self.inAbout:
+                self.drawMenu()
+            else:
+                self.drawAbout()
         else:
             self.drawSettings()
 
     def drawDot(self):
+        if self.state == 0:
+            self.screen.blit(self.menu_dot, (145, 253))
+            self.screen.blit(self.menu_dot2, (145, 293))
+            self.screen.blit(self.menu_dot2, (145, 333))
+            self.screen.blit(self.menu_dot2, (145, 373))
+        elif self.state == 1:
+            self.screen.blit(self.menu_dot, (145, 293))
+            self.screen.blit(self.menu_dot2, (145, 373))
+            self.screen.blit(self.menu_dot2, (145, 253))
+            self.screen.blit(self.menu_dot2, (145, 333))
+        elif self.state == 2:
+            self.screen.blit(self.menu_dot, (145, 333))
+            self.screen.blit(self.menu_dot2, (145, 373))
+            self.screen.blit(self.menu_dot2, (145, 253))
+            self.screen.blit(self.menu_dot2, (145, 293))
+        elif self.state == 3:
+            self.screen.blit(self.menu_dot, (145, 373))
+            self.screen.blit(self.menu_dot2, (145, 333))
+            self.screen.blit(self.menu_dot2, (145, 253))
+            self.screen.blit(self.menu_dot2, (145, 293))
+
+    def drawDot1(self):
         if self.state == 0:
             self.screen.blit(self.menu_dot, (145, 273))
             self.screen.blit(self.menu_dot2, (145, 313))
@@ -67,6 +93,7 @@ class Menu:
             self.screen.blit(self.menu_dot2, (145, 273))
             self.screen.blit(self.menu_dot2, (145, 313))
 
+            
     def loadSettings(self, url):
         try:
             with open(url) as jsonData:
@@ -95,9 +122,10 @@ class Menu:
 
     def drawMenu(self):
         self.drawDot()
-        self.dashboard.drawText("CHOOSE LEVEL", 180, 280, 24)
-        self.dashboard.drawText("SETTINGS", 180, 320, 24)
-        self.dashboard.drawText("EXIT", 180, 360, 24)
+        self.dashboard.drawText("NEWGAME", 180, 260, 24)
+        self.dashboard.drawText("SETTINGS", 180, 300, 24)
+        self.dashboard.drawText("ABOUT", 180, 340, 24)
+        self.dashboard.drawText("EXIT", 180, 380, 24)
 
     def drawMenuBackground(self, withBanner=True):
         for y in range(0, 13):
@@ -136,7 +164,7 @@ class Menu:
         self.screen.blit(self.level.sprites.spriteCollection.get("goomba-1").image, (18.5*32, 12*32))
 
     def drawSettings(self):
-        self.drawDot()
+        self.drawDot1()
         self.dashboard.drawText("MUSIC", 180, 280, 24)
         if self.music:
             self.dashboard.drawText("ON", 340, 280, 24)
@@ -177,6 +205,14 @@ class Menu:
                 self.dashboard.drawText(levelName, 175*j+textOffset, 250, 12)
                 self.drawBorder(175*j+offset, 210, 125, 75, color, 5)
                 j += 1
+    
+    def drawAbout(self):
+
+        # Vẽ tên tác giả
+        self.dashboard.drawText("Pham Hoang Duc Huy", 140, 260, 24)
+        self.dashboard.drawText("Ha Le Quoc Thai", 160, 300, 24)
+        self.dashboard.drawText("Nguyen Dinh Thi", 160, 340, 24)
+        self.dashboard.drawText("Ha Phan Thien Phu", 140, 380, 24)
 
     def loadLevelNames(self):
         files = []
@@ -197,9 +233,10 @@ class Menu:
                 sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    if self.inChoosingLevel or self.inSettings:
+                    if self.inChoosingLevel or self.inSettings or self.inAbout:
                         self.inChoosingLevel = False
                         self.inSettings = False
+                        self.inAbout = False
                         self.__init__(self.screen, self.dashboard, self.level, self.sound)
                     else:
                         pygame.quit()
@@ -216,8 +253,10 @@ class Menu:
                         if self.currSelectedLevel+3 <= self.levelCount:
                             self.currSelectedLevel += 3
                             self.drawLevelChooser()
-                    if self.state < 2:
+                    if self.state <= 2:
                         self.state += 1
+                        if self.inSettings == True and self.state == 3:
+                            self.state -= 1
                 elif event.key == pygame.K_LEFT or event.key == pygame.K_h:
                     if self.currSelectedLevel > 1:
                         self.currSelectedLevel -= 1
@@ -242,6 +281,9 @@ class Menu:
                             self.inSettings = True
                             self.state = 0
                         elif self.state == 2:
+                            self.inAbout = True
+                            self.drawAbout()
+                        elif self.state == 3:
                             pygame.quit()
                             sys.exit()
                     else:

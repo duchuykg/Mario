@@ -7,6 +7,8 @@ class Font(Spritesheet):
         Spritesheet.__init__(self, filename=filePath)
         self.chars = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
         self.charSprites = self.loadFont()
+        # self.charSprites = pygame.font.Font("./img/PS.ttf", 50)
+
 
     def loadFont(self):
         font = {}
