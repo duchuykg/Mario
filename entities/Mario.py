@@ -6,8 +6,10 @@ from classes.Collider import Collider
 from classes.EntityCollider import EntityCollider
 from classes.Input import Input
 from classes.Sprites import Sprites
+from classes.Menu import Menu
 from entities.EntityBase import EntityBase
 from entities.Mushroom import RedMushroom
+from entities.CoinBrick import CoinBrick
 from traits.bounce import bounceTrait
 from traits.go import GoTrait
 from traits.jump import JumpTrait
@@ -59,7 +61,8 @@ class Mario(EntityBase):
         self.restart = False
         self.pause = False
         self.pauseObj = Pause(screen, self, dashboard)
-
+        self.oldList = []
+        
     def update(self):
         if self.checkInv == False:
             if self.invincibilityFrames > 0:
@@ -76,20 +79,40 @@ class Mario(EntityBase):
         self.collision.checkY()
         self.rect.x += self.vel.x
         self.collision.checkX()
-
+        
     def checkEntityCollision(self):
-        for ent in self.levelObj.entityList:
+        for ent in self.levelObj.entityList:            
             collisionState = self.EntityCollider.check(ent)
             if collisionState.isColliding:
                 if ent.type == "Item":
                     self._onCollisionWithItem(ent)
-                elif ent.type == "Block":
+                elif ent.type == "Block" :
                     self._onCollisionWithBlock(ent)
+                elif ent.type == "Blocks":
+                    self._onCollisionWithBlocks(ent)
                 elif ent.type == "Mob":
                     self._onCollisionWithMob(ent, collisionState)
                 elif ent.type == "ItemVIP":
                     self._onCollisionWithItemVIP(ent)
+    
+    def _onCollisionWithBlocks(self, block):
+        if not block.triggered:
+            self.dashboard.coins += 1
+            self.sound.play_sfx(self.sound.bump)
+        else: 
+            if block.rect.x < self.rect.x:
+                self.levelObj.addCoinBrick(
+                    int(self.rect.x / 32 + 2), int(self.rect.y / 32 - 3)
+                )
+            else:
+                self.levelObj.addCoinBrick(
+                    int(self.rect.x / 32 - 2), int(self.rect.y / 32 - 3)
+                )
+            
 
+        block.triggered = True  
+        
+              
     def _onCollisionWithItem(self, item):
         self.levelObj.entityList.remove(item)
         self.dashboard.points += 100
@@ -108,7 +131,7 @@ class Mario(EntityBase):
             self.dashboard.coins += 1
             self.sound.play_sfx(self.sound.bump)
         block.triggered = True
-
+   
     def _onCollisionWithMob(self, mob, collisionState):
         if self.checkInv == True:
             if isinstance(mob, RedMushroom) and mob.alive:
@@ -203,7 +226,9 @@ class Mario(EntityBase):
             self.input.checkForInput()
             
         self.restart = True
-
+#--------------------------------------------------------------------------
+    def gameBoss(self):
+        1
     def getPos(self):
         return self.camera.x + self.rect.x, self.rect.y
 

@@ -10,12 +10,11 @@ class CoinBrick(EntityBase):
         self.screen = screen
         self.spriteCollection = spriteCollection
         self.image = self.spriteCollection.get("bricks").image
-        self.type = "Block"
+        self.type = "Blocks"
         self.triggered = False
         self.sound = sound
         self.dashboard = dashboard
         self.item = Item(spriteCollection, screen, self.rect.x, self.rect.y)
-
     def update(self, cam):
         if not self.alive or self.triggered:
             self.image = self.spriteCollection.get("empty").image
@@ -25,3 +24,4 @@ class CoinBrick(EntityBase):
             (self.rect.x + cam.x, self.rect.y + 2),
         )
         self.screen.blit(self.image, (self.rect.x + cam.x, self.rect.y - 1))
+        

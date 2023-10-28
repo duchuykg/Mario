@@ -43,8 +43,8 @@ class Input:
                 mouseY / 32, mouseX / 32 - self.entity.camera.pos.x
             )
         if self.isLeftMouseButtonPressed(events):
-            self.entity.levelObj.addCoin(
-                mouseX / 32 - self.entity.camera.pos.x, mouseY / 32
+            self.entity.levelObj.addCoinBox(
+                int(mouseX / 32 - self.entity.camera.pos.x), int(mouseY / 32)
             )
 
     def checkForQuitAndRestartInputEvents(self, events):

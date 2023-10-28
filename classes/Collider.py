@@ -1,3 +1,9 @@
+import pygame
+import random
+
+from pygame import *
+import math as mp
+import asyncio
 class Collider:
     def __init__(self, entity, level):
         self.entity = entity
@@ -39,7 +45,7 @@ class Collider:
             ]
         except Exception:
             try:
-                self.entity.gameOver()
+                self.entity.gameBoss()
             except Exception:
                 self.entity.alive = None
             return

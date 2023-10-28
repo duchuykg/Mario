@@ -16,7 +16,7 @@
             "y":0,
             "redrawBg":false,
             "scalefactor":2,
-            "collision":true
+            "collision":false
         },
         {
             "name":"ground",
