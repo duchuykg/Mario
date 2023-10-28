@@ -13,6 +13,7 @@ class Sprites:
                 "./sprites/Goomba.json",
                 "./sprites/Koopa.json",
                 "./sprites/Animations.json",
+                "./sprites/Star.json",
                 "./sprites/BackgroundSprites.json",
                 "./sprites/ItemAnimations.json",
                 "./sprites/RedMushroom.json"

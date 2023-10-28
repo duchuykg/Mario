@@ -7,7 +7,7 @@ from entities.Mario import Mario
 
 
 windowSize = 640, 480
-
+pygame.display.set_caption("Mario")
 
 def main():
     pygame.mixer.pre_init(44100, -16, 2, 4096)
@@ -18,13 +18,13 @@ def main():
     sound = Sound()
     level = Level(screen, sound, dashboard)
     menu = Menu(screen, dashboard, level, sound)
-
+    
     while not menu.start:
         menu.update()
 
     mario = Mario(0, 0, level, screen, dashboard, sound)
     clock = pygame.time.Clock()
-
+    
     while not mario.restart:
         pygame.display.set_caption("Super Mario running with {:d} FPS".format(int(clock.get_fps())))
         if mario.pause:

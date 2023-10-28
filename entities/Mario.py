@@ -44,6 +44,7 @@ class Mario(EntityBase):
         self.inJump = False
         self.powerUpState = 0
         self.invincibilityFrames = 0
+        self.checkInv = False
         self.traits = {
             "jumpTrait": JumpTrait(self),
             "goTrait": GoTrait(smallAnimation, screen, self.camera, self),
@@ -60,8 +61,9 @@ class Mario(EntityBase):
         self.pauseObj = Pause(screen, self, dashboard)
 
     def update(self):
-        if self.invincibilityFrames > 0:
-            self.invincibilityFrames -= 1
+        if self.checkInv == False:
+            if self.invincibilityFrames > 0:
+                self.invincibilityFrames -= 1
         self.updateTraits()
         self.moveMario()
         self.camera.move()
@@ -85,12 +87,21 @@ class Mario(EntityBase):
                     self._onCollisionWithBlock(ent)
                 elif ent.type == "Mob":
                     self._onCollisionWithMob(ent, collisionState)
+                elif ent.type == "ItemVIP":
+                    self._onCollisionWithItemVIP(ent)
 
     def _onCollisionWithItem(self, item):
         self.levelObj.entityList.remove(item)
         self.dashboard.points += 100
         self.dashboard.coins += 1
         self.sound.play_sfx(self.sound.coin)
+        
+    def _onCollisionWithItemVIP(self, item):
+        self.levelObj.entityList.remove(item)
+        self.dashboard.points += 1000
+        self.sound.play_sfx(self.sound.coin)
+        self.checkInv = True
+        self.invincibilityFrames += 10000000
 
     def _onCollisionWithBlock(self, block):
         if not block.triggered:
@@ -99,41 +110,61 @@ class Mario(EntityBase):
         block.triggered = True
 
     def _onCollisionWithMob(self, mob, collisionState):
-        if isinstance(mob, RedMushroom) and mob.alive:
-            self.powerup(1)
-            self.killEntity(mob)
-            self.sound.play_sfx(self.sound.powerup)
-        elif collisionState.isTop and (mob.alive or mob.bouncing):
-            self.sound.play_sfx(self.sound.stomp)
-            self.rect.bottom = mob.rect.top
-            self.bounce()
-            self.killEntity(mob)
-        elif collisionState.isTop and mob.alive and not mob.active:
-            self.sound.play_sfx(self.sound.stomp)
-            self.rect.bottom = mob.rect.top
-            mob.timer = 0
-            self.bounce()
-            mob.alive = False
-        elif collisionState.isColliding and mob.alive and not mob.active and not mob.bouncing:
-            mob.bouncing = True
-            if mob.rect.x < self.rect.x:
-                mob.leftrightTrait.direction = -1
-                mob.rect.x += -5
-                self.sound.play_sfx(self.sound.kick)
+        if self.checkInv == True:
+            if isinstance(mob, RedMushroom) and mob.alive:
+                self.powerup(1)
+                self.killEntity(mob)
+                self.sound.play_sfx(self.sound.powerup)
+            elif collisionState.isColliding and mob.alive and not mob.active and not mob.bouncing:
+                mob.bouncing = True
+                if mob.rect.x < self.rect.x:
+                    mob.leftrightTrait.direction = -1
+                    mob.rect.x += -5
+                    self.sound.play_sfx(self.sound.kick)
+                else:
+                    mob.rect.x += 5
+                    mob.leftrightTrait.direction = 1
+                    self.sound.play_sfx(self.sound.kick)
             else:
-                mob.rect.x += 5
-                mob.leftrightTrait.direction = 1
-                self.sound.play_sfx(self.sound.kick)
-        elif collisionState.isColliding and mob.alive and not self.invincibilityFrames:
-            if self.powerUpState == 0:
-                self.gameOver()
-            elif self.powerUpState == 1:
-                self.powerUpState = 0
-                self.traits['goTrait'].updateAnimation(smallAnimation)
-                x, y = self.rect.x, self.rect.y
-                self.rect = pygame.Rect(x, y + 32, 32, 32)
-                self.invincibilityFrames = 60
-                self.sound.play_sfx(self.sound.pipe)
+                self.bounce()
+                self.killEntity(mob)
+                self.sound.play_sfx(self.sound.stomp)
+        else:
+            if isinstance(mob, RedMushroom) and mob.alive:
+                self.powerup(1)
+                self.killEntity(mob)
+                self.sound.play_sfx(self.sound.powerup)
+            elif collisionState.isTop and (mob.alive or mob.bouncing):
+                self.sound.play_sfx(self.sound.stomp)
+                self.rect.bottom = mob.rect.top
+                self.bounce()
+                self.killEntity(mob)
+            elif collisionState.isTop and mob.alive and not mob.active:
+                self.sound.play_sfx(self.sound.stomp)
+                self.rect.bottom = mob.rect.top
+                mob.timer = 0
+                self.bounce()
+                mob.alive = False
+            elif collisionState.isColliding and mob.alive and not mob.active and not mob.bouncing:
+                mob.bouncing = True
+                if mob.rect.x < self.rect.x:
+                    mob.leftrightTrait.direction = -1
+                    mob.rect.x += -5
+                    self.sound.play_sfx(self.sound.kick)
+                else:
+                    mob.rect.x += 5
+                    mob.leftrightTrait.direction = 1
+                    self.sound.play_sfx(self.sound.kick)
+            elif collisionState.isColliding and mob.alive and not self.invincibilityFrames:
+                if self.powerUpState == 0:
+                    self.gameOver()
+                elif self.powerUpState == 1:
+                    self.powerUpState = 0
+                    self.traits['goTrait'].updateAnimation(smallAnimation)
+                    x, y = self.rect.x, self.rect.y
+                    self.rect = pygame.Rect(x, y + 32, 32, 32)
+                    self.invincibilityFrames = 60
+                    self.sound.play_sfx(self.sound.pipe)
 
     def bounce(self):
         self.traits["bounceTrait"].jump = True
@@ -170,6 +201,7 @@ class Mario(EntityBase):
         while self.sound.music_channel.get_busy():
             pygame.display.update()
             self.input.checkForInput()
+            
         self.restart = True
 
     def getPos(self):
