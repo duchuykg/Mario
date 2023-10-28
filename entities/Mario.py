@@ -116,6 +116,7 @@ class Mario(EntityBase):
                 self.killEntity(mob)
                 self.sound.play_sfx(self.sound.powerup)
             elif collisionState.isColliding and mob.alive and not mob.active and not mob.bouncing:
+                self.bounce()
                 mob.bouncing = True
                 if mob.rect.x < self.rect.x:
                     mob.leftrightTrait.direction = -1
@@ -126,7 +127,6 @@ class Mario(EntityBase):
                     mob.leftrightTrait.direction = 1
                     self.sound.play_sfx(self.sound.kick)
             else:
-                self.bounce()
                 self.killEntity(mob)
                 self.sound.play_sfx(self.sound.stomp)
         else:
