@@ -1,9 +1,6 @@
-import pygame
-import random
-
 from pygame import *
-import math as mp
-import asyncio
+
+
 class Collider:
     def __init__(self, entity, level):
         self.entity = entity
@@ -36,7 +33,7 @@ class Collider:
 
     def checkY(self):
         self.entity.onGround = False
-        
+
         try:
             rows = [
                 self.level[self.entity.getPosIndex().y],

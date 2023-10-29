@@ -1,51 +1,50 @@
 {
     "spriteSheetURL": "./img/tiles.png",
-    "type":"animation",
-    "sprites":[
+    "type": "animation",
+    "sprites": [
         {
-            "name":"CoinBox",
-            "images":[
+            "name": "CoinBox",
+            "images": [
                 {
-                    "x":24,
-                    "y":0,
-                    "scale":2
+                    "x": 24,
+                    "y": 0,
+                    "scale": 2
                 },
                 {
-                    "x":25,
-                    "y":0,
-                    "scale":2
+                    "x": 25,
+                    "y": 0,
+                    "scale": 2
                 },
                 {
-                    "x":26,
-                    "y":0,
-                    "scale":2
+                    "x": 26,
+                    "y": 0,
+                    "scale": 2
                 }
             ],
-            "deltaTime":10,
+            "deltaTime": 10,
             "colorKey": null
         },
         {
-            "name":"coin",
-            "images":[
+            "name": "coin",
+            "images": [
                 {
-                    "x":24,
-                    "y":1,
-                    "scale":2
+                    "x": 24,
+                    "y": 1,
+                    "scale": 2
                 },
                 {
-                    "x":25,
-                    "y":1,
-                    "scale":2
+                    "x": 25,
+                    "y": 1,
+                    "scale": 2
                 },
                 {
-                    "x":26,
-                    "y":1,
-                    "scale":2
+                    "x": 26,
+                    "y": 1,
+                    "scale": 2
                 }
             ],
-            "deltaTime":10,
+            "deltaTime": 10,
             "colorKey": -1
         }
     ]
 }
-
