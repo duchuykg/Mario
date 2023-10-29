@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "mario"
+version = "0.1.0"
+description = ""
+authors = ["thaiha1607 <halequocthai@outlook.com>", "duchuykg <duchuyhskg@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+scipy = "^1.11.3"
+pygame = "^2.5.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
