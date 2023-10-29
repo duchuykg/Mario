@@ -1,8 +1,10 @@
-import pygame
 import sys
 
-from classes.Spritesheet import Spritesheet
+import pygame
+
 from classes.GaussianBlur import GaussianBlur
+from classes.Spritesheet import Spritesheet
+
 
 class Pause:
     def __init__(self, screen, entity, dashboard):

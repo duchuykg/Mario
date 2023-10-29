@@ -1,5 +1,3 @@
-from copy import copy
-
 from entities.EntityBase import EntityBase
 from entities.Item import Item
 
@@ -15,6 +13,7 @@ class CoinBrick(EntityBase):
         self.sound = sound
         self.dashboard = dashboard
         self.item = Item(spriteCollection, screen, self.rect.x, self.rect.y)
+
     def update(self, cam):
         if not self.alive or self.triggered:
             self.image = self.spriteCollection.get("empty").image
@@ -24,4 +23,3 @@ class CoinBrick(EntityBase):
             (self.rect.x + cam.x, self.rect.y + 2),
         )
         self.screen.blit(self.image, (self.rect.x + cam.x, self.rect.y - 1))
-        

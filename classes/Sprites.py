@@ -16,7 +16,7 @@ class Sprites:
                 "./sprites/Star.json",
                 "./sprites/BackgroundSprites.json",
                 "./sprites/ItemAnimations.json",
-                "./sprites/RedMushroom.json"
+                "./sprites/RedMushroom.json",
             ]
         )
 
@@ -72,10 +72,10 @@ class Sprites:
                         except KeyError:
                             colorkey = None
                         try:
-                            xSize = sprite['xsize']
-                            ySize = sprite['ysize']
+                            xSize = sprite["xsize"]
+                            ySize = sprite["ysize"]
                         except KeyError:
-                            xSize, ySize = data['size']
+                            xSize, ySize = data["size"]
                         dic[sprite["name"]] = Sprite(
                             mySpritesheet.image_at(
                                 sprite["x"],

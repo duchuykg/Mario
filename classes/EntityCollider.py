@@ -3,7 +3,6 @@ class EntityCollider:
         self.entity = entity
 
     def check(self, target):
-        
         if self.entity.rect.colliderect(target.rect):
             return self.determineSide(target.rect, self.entity.rect)
         return CollisionState(False, False)
@@ -22,6 +21,7 @@ class EntityCollider:
                 if self.entity.vel.y > 0:
                     return CollisionState(True, True)
         return CollisionState(True, False)
+
 
 class CollisionState:
     def __init__(self, _isColliding, _isTop):

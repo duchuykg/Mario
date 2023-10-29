@@ -1,16 +1,18 @@
 import json
+
 import pygame
 
 from classes.Sprites import Sprites
 from classes.Tile import Tile
 from entities.Coin import Coin
-from entities.Star import Star
+from entities.CoinBox import CoinBox
 from entities.CoinBrick import CoinBrick
 from entities.Goomba import Goomba
-from entities.Mushroom import RedMushroom
 from entities.Koopa import Koopa
-from entities.CoinBox import CoinBox
+from entities.Mushroom import RedMushroom
 from entities.RandomBox import RandomBox
+from entities.Star import Star
+
 
 class Level:
     def __init__(self, screen, sound, dashboard):
@@ -37,9 +39,12 @@ class Level:
             [self.addKoopa(x, y) for x, y in data["level"]["entities"]["Koopa"]]
             [self.addCoin(x, y) for x, y in data["level"]["entities"]["coin"]]
             [self.addCoinBrick(x, y) for x, y in data["level"]["entities"]["coinBrick"]]
-            [self.addRandomBox(x, y, item) for x, y, item in data["level"]["entities"]["RandomBox"]]
+            [
+                self.addRandomBox(x, y, item)
+                for x, y, item in data["level"]["entities"]["RandomBox"]
+            ]
             [self.addStar(x, y) for x, y in data["level"]["entities"]["star"]]
-        except:
+        except Exception:
             # if no entities in Level
             pass
 
@@ -48,17 +53,17 @@ class Level:
         for x in range(*data["level"]["layers"]["sky"]["x"]):
             layers.append(
                 (
-                        [
-                            Tile(self.sprites.spriteCollection.get("sky"), None)
-                            for y in range(*data["level"]["layers"]["sky"]["y"])
-                        ]
-                        + [
-                            Tile(
-                                self.sprites.spriteCollection.get("ground"),
-                                pygame.Rect(x * 32, (y - 1) * 32, 32, 32),
-                            )
-                            for y in range(*data["level"]["layers"]["ground"]["y"])
-                        ]
+                    [
+                        Tile(self.sprites.spriteCollection.get("sky"), None)
+                        for y in range(*data["level"]["layers"]["sky"]["y"])
+                    ]
+                    + [
+                        Tile(
+                            self.sprites.spriteCollection.get("ground"),
+                            pygame.Rect(x * 32, (y - 1) * 32, 32, 32),
+                        )
+                        for y in range(*data["level"]["layers"]["ground"]["y"])
+                    ]
                 )
             )
         self.level = list(map(list, zip(*layers)))
@@ -106,7 +111,11 @@ class Level:
             for yOff in range(0, 2):
                 for xOff in range(0, 3):
                     self.level[y + yOff][x + xOff] = Tile(
-                        self.sprites.spriteCollection.get("cloud{}_{}".format(yOff + 1, xOff + 1)), None, )
+                        self.sprites.spriteCollection.get(
+                            "cloud{}_{}".format(yOff + 1, xOff + 1)
+                        ),
+                        None,
+                    )
         except IndexError:
             return
 
@@ -170,7 +179,7 @@ class Level:
                 item,
                 self.sound,
                 self.dashboard,
-                self
+                self,
             )
         )
 
@@ -178,9 +187,8 @@ class Level:
         self.entityList.append(Coin(self.screen, self.sprites.spriteCollection, x, y))
 
     def addStar(self, x, y):
-        self.entityList.append(Star(self.screen, self.sprites.spriteCollection, x, y)
-    )
-    
+        self.entityList.append(Star(self.screen, self.sprites.spriteCollection, x, y))
+
     def addCoinBrick(self, x, y):
         self.level[y][x] = Tile(None, pygame.Rect(x * 32, y * 32 - 1, 32, 32))
         self.entityList.append(
@@ -190,7 +198,7 @@ class Level:
                 x,
                 y,
                 self.sound,
-                self.dashboard
+                self.dashboard,
             )
         )
 
@@ -206,5 +214,7 @@ class Level:
 
     def addRedMushroom(self, x, y):
         self.entityList.append(
-            RedMushroom(self.screen, self.sprites.spriteCollection, x, y, self, self.sound)
+            RedMushroom(
+                self.screen, self.sprites.spriteCollection, x, y, self, self.sound
+            )
         )
