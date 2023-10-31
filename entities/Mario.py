@@ -375,7 +375,7 @@ class Mario(EntityBase):
                 self.endimagerect.centerx = 4 * self.window_width / 5
                 self.endimagerect.centery = 2 * self.window_height / 4
 
-                self.loseimage = pygame.image.load("./img/lose.jpg")
+                self.loseimage = pygame.image.load("./img/lose.png")
                 self.loseimagerect = self.loseimage.get_rect()
                 self.loseimagerect.centerx = self.window_width / 2
                 self.loseimagerect.centery = self.window_height / 2
